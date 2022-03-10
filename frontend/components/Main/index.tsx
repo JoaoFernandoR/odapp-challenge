@@ -1,28 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 // Styles
 import { MainContainer } from "./main.styles";
 // Components
 import MyInput from "../../shared/MyInput";
-// Helpers
-import api from "../../api/api";
+// Contexts
+import { PacientsContext } from "../../contexts/pacientsContext";
 
 const Main = () => {
-    const [pacients, setMyPacients] = useState([]);
-    const [nome, setNome] = useState("");
+    const { pacients, loadPacients } = useContext(PacientsContext);
 
+    const [nome, setNome] = useState("");
     const [editMode, setEditMode] = useState(false);
 
-    useEffect(() => {
-        const callApi = async () => {
-            const { data } = await api.get("");
-            setMyPacients(data.data);
-        };
-        callApi();
-    }, []);
+    // useEffect(() => {
+    //     if (pacients.length === 0) loadPacients();
+    // }, [pacients]);
 
     return (
         <section id="main">
-            {console.log(pacients)}
             <MainContainer>
                 <MyInput
                     label="Nome"

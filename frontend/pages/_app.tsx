@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { PacientsProvider } from "../contexts/pacientsContext";
 // Styles
 import "../styles/globals.css";
 
@@ -11,7 +12,9 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <meta name="description" content="Homepage of icarros" />
                 <link rel="icon" href="/autismo-fita.jpg" />
             </Head>
-            <Component {...pageProps} />
+            <PacientsProvider>
+                <Component {...pageProps} />
+            </PacientsProvider>
         </>
     );
 }
