@@ -1,11 +1,11 @@
 // Styles
-import { HeaderContainer } from "./styles";
+import { HeaderContainer, Logo } from "./styles";
 
 const Header = () => {
     return (
         <header>
             <HeaderContainer>
-                <h1>TESTE </h1>
+                <Logo> ODAPP </Logo>
             </HeaderContainer>
         </header>
     );
