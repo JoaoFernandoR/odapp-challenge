@@ -1,27 +1,8 @@
 import React, { createContext, useState } from "react";
+// Interfaces
+import { PacientsContextData } from "./interfaces";
 // helpers
 import api from "../api/api";
-
-interface PacientsContextData {
-    pacients: any;
-    loadPacients: () => void;
-    loadStates: () => void;
-    loadCities: (siglaUF: string) => void;
-    createPacient: (params: any) => void;
-    states: StatesProps[];
-    cities: StatesProps[];
-}
-
-export interface StatesProps {
-    id: number;
-    sigla: string;
-    nome: string;
-}
-
-export interface CitiesProps {
-    id: string;
-    nome: string;
-}
 
 export const PacientsContext = createContext<PacientsContextData>(
     {} as PacientsContextData
@@ -67,12 +48,35 @@ export const PacientsProvider = ({ children }: any) => {
         try {
             const { data } = await api.post("", params);
 
-            if (data.status === "success") console.log("deu certo");
-            else {
-                console.log("nao deu certo");
-            }
+            data.status === "success"
+                ? loadPacients()
+                : console.log("nao deu certo");
         } catch (error) {
-            console.log("error in loadPacients in [PacientsContext]", error);
+            console.log("error in createPacient in [PacientsContext]", error);
+        }
+    };
+
+    const deletePacient = async (id: string) => {
+        try {
+            const { data } = await api.delete("", { data: { id: id } });
+
+            data.status === "success"
+                ? setPacients(data.data)
+                : console.log("nao deu certo");
+        } catch (error) {
+            console.log("error in deletePacient in [PacientsContext]", error);
+        }
+    };
+
+    const editPacient = async (id: string, params: any) => {
+        try {
+            const { data } = await api.patch(`/${id}`, params);
+
+            data.status === "success"
+                ? setPacients(data.data)
+                : console.log("nao deu certo");
+        } catch (error) {
+            console.log("error in deletePacient in [PacientsContext]", error);
         }
     };
 
@@ -86,6 +90,8 @@ export const PacientsProvider = ({ children }: any) => {
                 loadCities,
                 cities,
                 createPacient,
+                deletePacient,
+                editPacient,
             }}
         >
             {children}

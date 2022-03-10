@@ -7,11 +7,11 @@ import { MyCard, MyCardContent, SubTitle } from "./pacientItem.styles";
 import { PacientProps } from "../../../shared/interfaces/interfaces";
 
 interface PacientItemProps extends PacientProps {
-    deletePacient(id: number): void;
-    editPacient(id: number): void;
+    deletePacient(id: string): void;
+    editPacient(id: string): void;
 }
 const PacientItem = ({
-    id,
+    _id,
     nome,
     cidade,
     dataCadastro,
@@ -27,20 +27,24 @@ const PacientItem = ({
                     <h3>{nome}</h3>
                     <SubTitle>Cidade: {cidade}</SubTitle>
                     <SubTitle>Estado: {estado}</SubTitle>
-                    <SubTitle>dataCadastro: {dataCadastro}</SubTitle>
+                    <SubTitle>Idade: {idade} anos</SubTitle>
+                    <SubTitle>
+                        Data de cadastro:{" "}
+                        {new Date(dataCadastro).toLocaleDateString()}
+                    </SubTitle>
                 </div>
-                {/* <div>
-                    <IconButton size="large" onClick={() => editPacient(id)}>
+                <div>
+                    <IconButton size="large" onClick={() => editPacient(_id)}>
                         <EditIcon fontSize="inherit" />
                     </IconButton>
                     <IconButton
                         aria-label="delete"
                         size="large"
-                        onClick={() => deletePacient(id)}
+                        onClick={() => deletePacient(_id)}
                     >
                         <DeleteIcon fontSize="inherit" />
                     </IconButton>
-                </div> */}
+                </div>
             </MyCardContent>
         </MyCard>
     );

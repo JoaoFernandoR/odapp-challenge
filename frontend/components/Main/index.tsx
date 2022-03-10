@@ -10,15 +10,13 @@ import "react-notifications/lib/notifications.css";
 // Styles
 import { MainContainer, Row, MyButton } from "./main.styles";
 // Components
+import PacientItem from "./PacientItem";
 import MyInput from "../../shared/MyInput";
 // Contexts
-import {
-    CitiesProps,
-    PacientsContext,
-    StatesProps,
-} from "../../contexts/pacientsContext";
+import { PacientsContext } from "../../contexts/pacientsContext";
+// Interfaces
+import { StatesProps } from "../../contexts/interfaces";
 import { PacientProps } from "../../shared/interfaces/interfaces";
-import PacientItem from "./PacientItem";
 
 const Main = () => {
     const {
@@ -29,14 +27,18 @@ const Main = () => {
         cities,
         loadCities,
         createPacient,
+        deletePacient,
+        editPacient,
     } = useContext(PacientsContext);
 
     const [nome, setNome] = useState("");
     const [idade, setIdade] = useState<any>(0);
     const [cidade, setCidade] = useState("");
     const [isError, setIsError] = useState(false);
+
     const [uf, setUf] = useState("UF");
     const [editMode, setEditMode] = useState(false);
+    const [idToEdit, setIdToEdit] = useState("");
 
     useEffect(() => {
         if (pacients.length === 0) {
@@ -75,6 +77,22 @@ const Main = () => {
             estado: uf,
         };
 
+        if (editMode) {
+            editPacient(idToEdit, paramsToSend);
+            setIdToEdit("");
+            setNome("");
+            setUf("");
+            setIdade("");
+            setCidade("");
+            setEditMode(false);
+            NotificationManager.success(
+                "Paciente editado com sucesso",
+                "Sucesso",
+                3000
+            );
+            return;
+        }
+
         createPacient(paramsToSend);
 
         NotificationManager.success(
@@ -85,6 +103,7 @@ const Main = () => {
     };
 
     const onStateSelect = (event: any) => {
+        setCidade("");
         setUf(event.target.value);
         loadCities(event.target.value);
     };
@@ -95,9 +114,35 @@ const Main = () => {
         setIdade(parseInt(e.target.value));
     };
 
-    const deletePacient = () => {};
+    const onDelete = async (id: string) => {
+        deletePacient(id);
 
-    const editPacient = () => {};
+        NotificationManager.success(
+            "Usuário deletado com sucesso",
+            "Sucesso",
+            1500
+        );
+    };
+
+    const onEdit = (id: string) => {
+        setEditMode(!editMode);
+
+        if (editMode) {
+            setEditMode(!editMode);
+
+            setNome("");
+            setIdade(0);
+            setIdToEdit("");
+            return;
+        }
+        const filtered = pacients.find((item: PacientProps) => item._id === id);
+
+        if (filtered) {
+            setNome(filtered.nome);
+            setIdade(filtered.idade);
+            setIdToEdit(id);
+        }
+    };
 
     return (
         <MainContainer>
@@ -105,7 +150,7 @@ const Main = () => {
 
             <form onSubmit={addPacient}>
                 <Row>
-                    <div style={{ width: 400, marginBottom: 40 }}>
+                    <div style={{ width: 400 }}>
                         <MyInput
                             label="Nome"
                             editMode={editMode}
@@ -125,8 +170,6 @@ const Main = () => {
                             error={isError}
                         />
                     </div>
-                </Row>
-                <Row>
                     <div>
                         <InputLabel
                             id="demo-simple-select-label"
@@ -182,6 +225,7 @@ const Main = () => {
                         </div>
                     ) : null}
                 </Row>
+                <Row></Row>
                 <MyButton
                     variant="contained"
                     type="submit"
@@ -194,13 +238,13 @@ const Main = () => {
                 {pacients.map((item: PacientProps) => {
                     return (
                         <PacientItem
-                            key={item.id}
-                            id={item.id}
+                            key={item._id}
+                            _id={item._id}
                             nome={item.nome}
                             cidade={item.cidade}
                             estado={item.estado}
-                            deletePacient={deletePacient}
-                            editPacient={editPacient}
+                            deletePacient={onDelete}
+                            editPacient={onEdit}
                             idade={item.idade}
                             dataCadastro={item.dataCadastro}
                         />

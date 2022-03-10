@@ -1,5 +1,5 @@
 export interface PacientProps {
-    id: string;
+    _id: string;
     nome: string;
     idade: number;
     dataCadastro: string;

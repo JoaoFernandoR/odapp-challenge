@@ -5,6 +5,7 @@ export const MainContainer = styled(Container)``;
 
 export const Row = styled("div")`
     display: flex;
+    align-items: center;
     gap: 16px;
     margin-bottom: 12px;
 `;
