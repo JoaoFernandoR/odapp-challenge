@@ -8,7 +8,7 @@ import {
 } from "react-notifications";
 import "react-notifications/lib/notifications.css";
 // Styles
-import { MainContainer, Row, MyButton } from "./main.styles";
+import { MainContainer, Row, MyButton, RowItem, NameView } from "./main.styles";
 // Components
 import PacientItem from "./PacientItem";
 import MyInput from "../../shared/MyInput";
@@ -150,7 +150,7 @@ const Main = () => {
 
             <form onSubmit={addPacient}>
                 <Row>
-                    <div style={{ width: 400 }}>
+                    <NameView>
                         <MyInput
                             label="Nome"
                             editMode={editMode}
@@ -159,7 +159,7 @@ const Main = () => {
                             setValue={setNome}
                             error={false}
                         />
-                    </div>
+                    </NameView>
                     <div style={{ width: 80 }}>
                         <MyInput
                             label="Idade"
